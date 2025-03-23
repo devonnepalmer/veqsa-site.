@@ -37,10 +37,7 @@
       align-items: center;
       flex-wrap: wrap;
     }
-    .logo {
-      font-size: 1.4rem;
-      font-weight: bold;
-    }
+    .logo { font-size: 1.4rem; font-weight: bold; }
     .controls {
       display: flex;
       align-items: center;
@@ -62,10 +59,7 @@
       margin: 1rem 2rem;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
-    .summary-box {
-      text-align: center;
-      padding: 0.5rem;
-    }
+    .summary-box { text-align: center; padding: 0.5rem; }
     .summary-box strong {
       display: block;
       font-size: 1.5rem;
@@ -147,21 +141,30 @@
     <div class="logo">VEQSA UIFI – Live Multi-Scenario Dashboard</div>
     <div class="controls">
       <select id="scenarioSelect">
-        <option value="healthcare">🏥 Healthcare</option>
-        <option value="industrial">🏭 Industrial</option>
-        <option value="military">🪖 Military</option>
-        <option value="financial">💰 Financial</option>
-        <option value="smartcity">🏙 Smart City</option>
-        <option value="space">🚀 Space Ops</option>
+        <option value="healthcare"> Healthcare</option>
+        <option value="industrial"> Industrial</option>
+        <option value="military"> Military</option>
+        <option value="financial"> Financial</option>
+        <option value="smartcity"> Smart City</option>
+        <option value="space"> Space Ops</option>
       </select>
       <button class="theme-toggle" onclick="toggleTheme()">🌗 Theme</button>
     </div>
   </header>
 
   <div class="summary" id="summaryStats">
-    <div class="summary-box"><strong id="kpi1">--</strong><span>Primary KPI</span></div>
-    <div class="summary-box"><strong id="kpi2">--</strong><span>Risk Index</span></div>
-    <div class="summary-box"><strong id="kpi3">--</strong><span>Active Tasks</span></div>
+    <div class="summary-box">
+      <strong id="kpi1">--</strong>
+      <span>Primary KPI</span>
+    </div>
+    <div class="summary-box">
+      <strong id="kpi2">--</strong>
+      <span>Risk Index</span>
+    </div>
+    <div class="summary-box">
+      <strong id="kpi3">--</strong>
+      <span>Active Tasks</span>
+    </div>
   </div>
 
   <div class="dashboard">
@@ -170,25 +173,28 @@
         <h3 id="chartTitle">Vitals</h3>
         <canvas id="mainChart"></canvas>
       </div>
+
       <div class="panel">
         <h3>HOI Priority Matrix</h3>
         <div class="matrix" id="matrixContainer"></div>
       </div>
+
       <div class="panel">
         <h3>RTAO – Adaptive Recommendations</h3>
-        <div id="rtaoPanel"><div class="task">🧠 Loading recommendations...</div></div>
+        <div id="rtaoPanel">
+          <div class="task">🧠 Loading recommendations...</div>
+        </div>
       </div>
     </div>
+
     <div class="panel alerts">
       <h3>📡 Live Alerts</h3>
       <div id="alertStream"></div>
       <div class="sidebar-info" id="insightPanel">System insights loading...</div>
     </div>
   </div>
-
-  <!-- SCRIPT BLOCK GOES HERE -->
-  <!-- To keep this message short, I’ll paste the JS in the next reply -->
 <script>
+// 🧠 Core Variables
 let chartInstance;
 const chartCtx = document.getElementById("mainChart").getContext("2d");
 const kpi1 = document.getElementById("kpi1");
@@ -201,15 +207,18 @@ const rtaoPanel = document.getElementById("rtaoPanel");
 
 let activeScenario = "healthcare";
 
+// 🔁 Utility for Simulated Data
 function randLine(len, min, max) {
   return Array.from({ length: len }, () => Math.floor(Math.random() * (max - min + 1)) + min);
 }
 
+// 🌗 Theme Toggle
 function toggleTheme() {
   const html = document.documentElement;
   html.setAttribute("data-theme", html.getAttribute("data-theme") === "dark" ? "light" : "dark");
 }
 
+// ⚠️ Alert Stream Handler
 function streamAlert(text) {
   const el = document.createElement("div");
   el.className = "alert";
@@ -218,6 +227,7 @@ function streamAlert(text) {
   if (alertStream.childNodes.length > 6) alertStream.removeChild(alertStream.lastChild);
 }
 
+// 🔄 Scenario Loader
 function loadScenario(key) {
   activeScenario = key;
   const s = scenarios[key];
@@ -253,6 +263,7 @@ function loadScenario(key) {
   });
 }
 
+// 🔁 Auto Simulator Loop
 function simulate() {
   const s = scenarios[activeScenario];
   if (!s) return;
@@ -272,6 +283,7 @@ function simulate() {
   loadScenario(activeScenario);
 }
 
+// 🔌 Bindings
 document.getElementById("scenarioSelect").addEventListener("change", e => {
   loadScenario(e.target.value);
 });
@@ -281,6 +293,7 @@ window.onload = () => {
   setInterval(simulate, 6000);
 };
 
+// 🔢 Scenario Definitions (all 6 sectors)
 const scenarios = {
   healthcare: {
     chartTitle: "Patient Vitals",
@@ -305,6 +318,7 @@ const scenarios = {
       ]
     })
   },
+
   industrial: {
     chartTitle: "Sensor Uptime – Line A & B",
     kpis: ["97.4%", "68", "4"],
@@ -328,6 +342,7 @@ const scenarios = {
       ]
     })
   },
+
   military: {
     chartTitle: "Mission Readiness Score",
     kpis: ["88%", "74", "5"],
@@ -350,10 +365,90 @@ const scenarios = {
       ]
     }),
     chartType: "bar"
+  },
+
+  financial: {
+    chartTitle: "Market Volatility – Live Index Feed",
+    kpis: ["21.4", "64", "3"],
+    insight: "Volatility spike near 10:40AM triggered auto-adjust protocol.",
+    alerts: [
+      "📉 Dow drops 1.8%",
+      "🚨 Crypto fluctuation exceeds 5%",
+      "🔐 Unusual trading pattern: Algo #12"
+    ],
+    matrix: {
+      High: ["Freeze high-risk asset class", "Flag hedge conflict"],
+      Medium: ["Notify risk officer", "Review options desk flow"],
+      Low: ["Balance exposure sheet", "Update internal forecast"]
+    },
+    rtao: [
+      { msg: "Auto-hedge emerging risk zone", confidence: 91 },
+      { msg: "Alert compliance on trade velocity", confidence: 83 },
+      { msg: "Shift holdings to safe harbor fund", confidence: 78 }
+    ],
+    chartData: () => ({
+      labels: ["9:00", "10:00", "11:00", "12:00"],
+      datasets: [
+        { label: "VIX Index", data: randLine(4, 18, 28), borderColor: "#6a0572", fill: false }
+      ]
+    })
+  },
+
+  smartcity: {
+    chartTitle: "Live Energy Load by Zone",
+    kpis: ["232 MW", "59", "7"],
+    insight: "Zone 3 trending 8% over historical max. Grid reroute underway.",
+    alerts: [
+      "⚡ Power surge – Zone 3",
+      "🚦 Traffic density – Level Red",
+      "🚰 Water pump offline – Block 19"
+    ],
+    matrix: {
+      High: ["Route alternate grid feed", "Auto-alert FD for tower 8"],
+      Medium: ["Notify transit command", "Reboot water system relay"],
+      Low: ["Schedule drone bin sweep", "Streetlight cluster offline"]
+    },
+    rtao: [
+      { msg: "Pre-load energy grid to Zone 2", confidence: 88 },
+      { msg: "Dispatch autonomous crew to sensor 29B", confidence: 81 },
+      { msg: "Optimize route map – green corridor", confidence: 75 }
+    ],
+    chartData: () => ({
+      labels: ["Z1", "Z2", "Z3", "Z4"],
+      datasets: [
+        { label: "Energy Load", data: randLine(4, 180, 260), backgroundColor: "#06d6a0" }
+      ]
+    }),
+    chartType: "bar"
+  },
+
+  space: {
+    chartTitle: "Orbital Signal Stability – Sat A-D",
+    kpis: ["93%", "61", "2"],
+    insight: "Sat B telemetry drop at 13:40. Auto-link recovery protocol active.",
+    alerts: [
+      "📡 Signal delay – Sat C",
+      "☄️ Radiation spike – flare watch",
+      "🛰️ Thruster glitch – Sat A"
+    ],
+    matrix: {
+      High: ["Reacquire signal lock", "Engage backup comm array"],
+      Medium: ["Monitor solar event probability", "Pulse diagnostic"],
+      Low: ["Sync with Earth relay", "Queue nav software update"]
+    },
+    rtao: [
+      { msg: "Switch to backup transponder – Sat B", confidence: 90 },
+      { msg: "Slow spin rotation vector", confidence: 84 },
+      { msg: "Pre-drift calibration sweep", confidence: 77 }
+    ],
+    chartData: () => ({
+      labels: ["Sat A", "Sat B", "Sat C", "Sat D"],
+      datasets: [
+        { label: "Signal (%)", data: randLine(4, 80, 98), borderColor: "#118ab2", fill: false }
+      ]
+    })
   }
-  // 🔁 Add 'financial', 'smartcity', and 'space' scenarios here if needed
 };
 </script>
-
 </body>
 </html>
